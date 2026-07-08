@@ -1,0 +1,5 @@
+#terraform files to igonre
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
