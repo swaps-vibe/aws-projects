@@ -1,0 +1,47 @@
+[200~pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Code pulled from GitHub!'
+            }
+        }
+
+        
+        stage('Test') {
+            steps {
+                echo 'Running testes..'
+                sh 'echi All tests passes!'
+            }
+        }
+
+        
+        stage('Build') {
+            steps {
+                echo 'Builiding application...'
+                sh 'echo Build complete!'
+            }
+        }
+
+        
+        stage('Deploy') {
+            steps {
+                echo 'Deploying to AWS...'
+                sh 'echo Deployment complete!'
+            }
+        }
+
+
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline Failed'
+        }
+    }
+}
