@@ -1,4 +1,4 @@
-[200~pipeline {
+pipeline {
     agent any
 
     stages {
@@ -13,7 +13,7 @@
         stage('Test') {
             steps {
                 echo 'Running testes..'
-                sh 'echi All tests passes!'
+                sh 'echo All tests passes!'
             }
         }
 
