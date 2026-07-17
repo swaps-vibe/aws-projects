@@ -16,7 +16,7 @@ pipeline {
 
                 steps{
                     echo 'Installing pyhton dependancies....'
-                    sh 'pip3 install boto3 pytest'
+                    sh 'pip3 install boto3 pytest --break-system-packages'
 
                 }    
 
