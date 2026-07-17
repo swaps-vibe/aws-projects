@@ -1,47 +1,74 @@
 pipeline {
-    agent any
+   agent any
+      
+        stages {
 
-    stages {
+            stage('Checkout') {
 
-        stage('Checkout') {
-            steps {
-                echo 'Code pulled from GitHub!'
+                steps{
+                    echo 'Pulling code from GitHub....'
+                    Checkout scm
+
+                }    
+
+            } 
+
+            stage('Install Dependencies') {
+
+                steps{
+                    echo 'Installing pyhton dependancies....'
+                    sh 'pip3 install boto3 pytest'
+
+                }    
+
+            } 
+
+            stage('Run Test') {
+
+                steps{
+                    echo 'Running the python test....'
+                    sh 'python3 -m pytest python-programs/ -v || true'
+
+                }    
+
+            } 
+
+            stage('Package Lambda') {
+
+                steps{
+                    echo 'Deploying to AWS Lambda.....'
+                    sh '''
+                         aws lambda update-function-code \
+                             --function-name backup-notifier \
+                             --zip-file fileb://lambda.zip \
+                             --region us-east-1 || true
+                         
+                         '''
+
+                }    
+
             }
+            
+             stage('Notify') {
+
+                steps{
+                    echo 'sending Notifications....'
+                    sh 'echo pipeline completed successfully!'
+
+                }    
+
+            } 
+
         }
 
-        
-        stage('Test') {
-            steps {
-                echo 'Running testes..'
-                sh 'echo All tests passes!'
-            }
-        }
-
-        
-        stage('Build') {
-            steps {
-                echo 'Builiding application...'
-                sh 'echo Build complete!'
-            }
-        }
-
-        
-        stage('Deploy') {
-            steps {
-                echo 'Deploying to AWS...'
-                sh 'echo Deployment complete!'
-            }
+        post {
+           success{
+               echo 'Pipeline completed succesfully!'
+           } 
+           failure{
+              echo 'Pipeline failed! check logs!'
+           }
         }
 
 
-    }
-
-    post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline Failed'
-        }
-    }
 }
